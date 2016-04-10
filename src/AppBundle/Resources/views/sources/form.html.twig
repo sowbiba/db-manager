@@ -1,0 +1,32 @@
+{% extends '::base.html.twig' %}
+{% form_theme form _self %}
+
+{% block sidebar '' %}
+{% block content_size %}12{% endblock content_size %}
+{% block pageSubTitle %}{% if not edit %}Ajouter une source{% else %}Modifier une source{% endif %}{% endblock pageSubTitle %}
+
+{% block breadcrumb %}{% include '@App/includes/menu.html.twig' %}{% endblock breadcrumb %}
+
+{% block content %}
+    <div class="row">
+        <a href="{{ url('sources_list') }}" class="btn btn-default">
+            <i class="fa fa-backward"></i> &nbsp;&nbsp;&nbsp; Retour
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 margin-center">
+            {{ form_start(form, {'method': 'POST'}) }}
+            {{ form_widget(form) }}
+
+            <div class="well text-center">
+                <button type="submit" name="submit" class="btn btn-primary" data-disable-after-click="true">
+                    <i class="fa fa-save"></i> Sauvegarder
+                </button>
+                <a href="{{ path('sources_list') }}" class="btn btn-danger margin-left-20">
+                    <i class="fa fa-times-circle"></i> Annuler
+                </a>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock content %}

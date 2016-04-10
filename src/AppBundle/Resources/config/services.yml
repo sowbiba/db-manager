@@ -1,0 +1,14 @@
+parameters:
+  app.manager.sources.class: AppBundle\Manager\SourcesManager
+  app.manager.targets.class: AppBundle\Manager\TargetsManager
+
+services:
+    app.manager.sources:
+        class: %app.manager.sources.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    app.manager.targets:
+        class: %app.manager.targets.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'

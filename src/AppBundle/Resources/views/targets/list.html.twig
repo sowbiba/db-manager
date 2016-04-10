@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+
+{% block pageSubTitle %}Liste des cibles{% endblock pageSubTitle %}
+
+{% block breadcrumb %}{% include '@App/includes/menu.html.twig' %}{% endblock breadcrumb %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-9 margin-center">
+            <table class="table table-bordered table-stripped targets-list">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Host</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for target in targets %}
+                        <tr>
+                            <td>{{ target.name }}</td>
+                            <td>{{ target.host }}</td>
+                            <td class="list-actions">
+                                <a href="#" data-test-url="{{ path('targets_test', {'id': target.id}) }}" title="Tester la connexion" data-toggle="modal" data-target="#test-connection-modal"><i class="fa fa-chain fa-success fa-2x"></i></a>
+                                <a href="{{ path('targets_edit', {'id': target.id}) }}" data-toggle="tooltip" data-placement="top" title="Editer la cible" class="margin-left-30"><i class="fa fa-edit fa-primary fa-2x"></i></a>
+                                <a
+                                        data-confirm-message="Etes-vous sûr de vouloir supprimer cette cible ?"
+                                        href="{{ path('targets_delete', {'id': target.id}) }}"
+                                        data-toggle="tooltip" data-placement="top" title="Supprimer la cible"
+                                        class="confirm"
+                                        >
+                                    <i class="fa fa-trash fa-danger fa-2x"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% include '@App/includes/test-connection-modal.html.twig' %}
+{% endblock content %}
+
+{% block sidebar_content %}
+    <ul class="sidebar_buttons">
+        <li>
+            <a href="{{ path('targets_add') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Ajouter une cible</a>
+        </li>
+    </ul>
+{% endblock sidebar_content %}

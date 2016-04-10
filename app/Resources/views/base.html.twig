@@ -1,13 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
+{% block html %}
     <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block head %}
+            {% block meta %}
+                <meta charset="UTF-8"/>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <meta name="description" content="Database Manager"/>
+                <meta name="keywords" content="Database Manager"/>
+                <meta name="author" content="Ibrahima SOW"/>
+                <meta name="robots" content="noindex,nofollow"/>
+            {% endblock meta %}
+
+            <title>{% block pageTitle %}Database Manager{% endblock %}</title>
+            <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+            {% block head_style %}
+                <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">
+                <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}" type="text/css">
+                <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}" type="text/css">
+                <link rel="stylesheet" href="{{ asset('css/utilities.css') }}" type="text/css">
+                <link rel="stylesheet" href="{{ asset('css/main.css') }}" type="text/css">
+                {% block stylesheets %}
+                {% endblock stylesheets %}
+            {% endblock head_style %}
+        {% endblock head %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <body{% block bodyAttributes %}{% endblock %}>
+    {% block body %}
+        {% block loader %}{% endblock loader %}
+
+        {% block navbar %}{% endblock navbar %}
+
+    {% block container %}
+        <div id="content_container" class="{% block container_class %}container{% endblock container_class %}">
+            {% block header %}{% endblock header %}
+
+            <div class="content">
+                {% block page_header %}
+                    <div class="header">
+                        <div class="page-header">
+                            {% block breadcrumb %}{% endblock breadcrumb %}
+                            <h1>{% block headline %}Database Manager <em>{% block pageSubTitle %}{% endblock %}</em>{% endblock headline %}</h1>
+                        </div>
+
+                        {% block header_actions %}{% endblock header_actions %}
+                    </div>
+                {% endblock page_header %}
+
+                {% block flash %}
+                    {% include 'Form/flash_messages.html.twig' %}
+                {% endblock flash %}
+
+                {% block content_row %}
+                    {% block content_container %}
+                        <div class="row">
+                            <div class="col-xs-{% block content_size %}9{% endblock content_size %} left">
+                                {% block content %}{% endblock content %}
+                            </div>
+                            {% block sidebar %}
+                                <div class="col-xs-3 right">
+                                    {% block sidebar_content %}{% endblock sidebar_content %}
+                                </div>
+                            {% endblock sidebar %}
+                        </div>
+                    {% endblock content_container %}
+                {% endblock content_row %}
+            </div>
+
+            <footer>
+                {% block footer %}{% endblock footer %}
+            </footer>
+        </div>
+    {% endblock container %}
+
+    {% block popin_confirm %}
+        {% embed ":Components:confirm.html.twig" %}{% endembed %}
+    {% endblock popin_confirm %}
+
+    {% block foot_script %}
+        <script src="/js/jquery-2.2.3.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        {% javascripts
+        '@AppBundle/Resources/public/javascripts/common.js'
+        output='/js/main.js'
+        %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {% block javascripts %}{% endblock javascripts %}
+    {% endblock foot_script %}
+
+    {% endblock body %}
     </body>
+{% endblock html %}
 </html>

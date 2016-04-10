@@ -38,3 +38,11 @@
 
 # Composer PHAR
 /composer.phar
+
+# NPM
+/node_modules
+/webpack/compiled
+
+
+# Database
+app/database/data/data.db3
