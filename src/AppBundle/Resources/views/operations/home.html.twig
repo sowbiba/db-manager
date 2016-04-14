@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block sidebar '' %}
+{% block content_size %}12{% endblock content_size %}
+{% block pageSubTitle %}Opérations{% endblock pageSubTitle %}
+
+{% block breadcrumb %}{% include '@App/includes/menu.html.twig' %}{% endblock breadcrumb %}
+
+{% block content %}
+    <div id="react-workspace"></div>
+{% endblock content %}
+
+{% block javascripts %}
+    {% javascripts
+    '@AppBundle/Resources/public/javascripts/operations.js'
+    output='/js/operations.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock javascripts %}

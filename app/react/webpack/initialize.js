@@ -6,14 +6,15 @@ var Workspace = require('../components/workspace');
 
 require('../stylesheets/index.css');
 
-var workspace = document.getElementById('react-revision-workspace');
+var workspace = document.getElementById('react-workspace');
 
 var store = require('../store/factory')();
+console.log(store());
 
-ReactDOM.render(<Provider store={ store }><Workspace mode={ mode } /></Provider>, workspace);
+ReactDOM.render(<Provider store={ store }><Workspace /></Provider>, workspace);
 
 var actions = require('../store/actions');
-store.dispatch(actions.loadRevision(
-    workspace.getAttribute('data-contract'),
-    workspace.getAttribute('data-revision')
-));
+
+store.dispatch(actions.loadData());
+
+console.log('ahhhh');

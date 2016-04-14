@@ -1,13 +1,13 @@
 var root = __dirname + '/../..';
+var projectRoot = __dirname + '/../../../..';
 
 module.exports = {
     entry: {
-        javascript: root + '/webpack/initialize.js',
-        html: root + '/webpack/public/index.html'
+        javascript: root + '/webpack/initialize.js'
     },
     output: {
-        filename: 'revisions.js',
-        path: root + '/webpack/compiled'
+        filename: 'operations.js',
+        path: projectRoot + '/src/AppBundle/Resources/public/javascripts/'
     },
     module: {
         loaders: [
