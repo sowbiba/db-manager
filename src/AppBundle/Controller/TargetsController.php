@@ -32,7 +32,7 @@ class TargetsController extends Controller
         $flashBag = $this->get('session')->getFlashBag();
         $flashBag->clear();
 
-        $form = $this->createForm(TargetsType::class);
+        $form = $this->createForm("\AppBundle\Form\Type\TargetsType");
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
@@ -70,7 +70,7 @@ class TargetsController extends Controller
         $flashBag = $this->get('session')->getFlashBag();
         $flashBag->clear();
 
-        $form = $this->createForm(TargetsType::class, $target);
+        $form = $this->createForm("\AppBundle\Form\Type\TargetsType", $target);
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);

@@ -52,12 +52,11 @@
 
 	var Workspace = __webpack_require__(177);
 
-	__webpack_require__(179);
+	__webpack_require__(183);
 
 	var workspace = document.getElementById('react-workspace');
 
-	var store = __webpack_require__(183)();
-	console.log(store());
+	var store = __webpack_require__(187)();
 
 	ReactDOM.render(React.createElement(Provider, {store:  store }, React.createElement(Workspace, null)), workspace);
 
@@ -20844,25 +20843,18 @@
 
 	var React = __webpack_require__(1);
 	var actions = __webpack_require__(178);
-	var connect = __webpack_require__(159).connect;
+	var Redux = __webpack_require__(159);
 
-	var connector = connect(
-	    function (state) {
-	        return {
-	            loaded: state.loaded,
-	            sources: state.sources,
-	            targets: state.targets
-	        };
-	    }
-	);
+	var Sources = __webpack_require__(179);
+	var Targets = __webpack_require__(181);
 
-	module.exports = connector(React.createClass({
+
+	var component = React.createClass({
 	    displayName: 'workspace',
 
 	    propTypes: {
-	        loaded: React.PropTypes.bool.isRequired,
-	        sources: React.PropTypes.object.isRequired,
-	        targets: React.PropTypes.object.isRequired
+	        sources: React.PropTypes.array,
+	        targets: React.PropTypes.array
 	    },
 
 	    computeClass: function() {
@@ -20873,21 +20865,36 @@
 	    },
 
 	    render: function () {
-	        if (! this.props.loaded)
+	        if (! this.props.sources)
 	            return (
-	                React.createElement("p", {className: "operations-loading"}, 
+	                React.createElement("p", {className: "revision-loading"}, 
 	                "Chargement en cours..."
 	                )
 	            );
 
 	        return (
 	            React.createElement("div", {className:  this.computeClass() }, 
-	                React.createElement("div", {className: "col-xs-5 left operations-sources-list"}), 
-	                React.createElement("div", {className: "col-xs-5 right operations-targets-list"})
+	                React.createElement("div", {className: "col-xs-5 left operations-sources-list"}, 
+	                    React.createElement(Sources, {sources:  this.props.sources})
+	                ), 
+	                React.createElement("div", {className: "col-xs-5 right operations-targets-list"}, 
+	                    React.createElement(Targets, {targets:  this.props.targets})
+	                )
 	            )
 	        );
 	    }
-	}));
+	});
+
+	var connect = Redux.connect(
+	    function (state) {
+	        return {
+	            sources: state.workspace.sources,
+	            targets: state.workspace.targets
+	        };
+	    }
+	);
+
+	module.exports = connect(component);
 
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "workspace.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
@@ -20901,6 +20908,9 @@
 	module.exports = {
 	    loadData() {
 	        return {type: 'LOAD_DATA'};
+	    },
+	    feedData(sources, targets) {
+	        return {type: 'FEED_DATA', sources: sources, targets: targets};
 	    }
 	};
 
@@ -20910,13 +20920,147 @@
 /* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	var React = __webpack_require__(1);
+
+	var Source = __webpack_require__(180);
+
+	module.exports = React.createClass({
+	    displayName: 'workspace.sources',
+
+	    propTypes: {
+	        sources: React.PropTypes.array.isRequired
+	    },
+
+	    render: function () {
+	        return React.createElement("div", null, " ",  this.props.sources.map(this.renderSource), " ");
+	    },
+
+	    renderSource: function(source) {
+	        return (
+	            React.createElement(Source, React.__spread({key: "source" + source.id},    source))
+	        );
+	    }
+	});
+
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "sources.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	var React = __webpack_require__(1);
+
+	module.exports = React.createClass({
+	    displayName: 'workspace.source',
+
+	    propTypes: {
+	        id: React.PropTypes.number.isRequired,
+	        name: React.PropTypes.string.isRequired,
+	        host: React.PropTypes.string.isRequired,
+	        slug: React.PropTypes.string.isRequired,
+	        type_id: React.PropTypes.number.isRequired,
+	        type_name: React.PropTypes.string.isRequired
+	    },
+
+	    render: function () {
+	        var classes = [
+	            'source',
+	            'source_type_' + this.props.type_id
+	        ];
+
+	        return (
+	            React.createElement("div", {className:  classes.join(' ') }, 
+	                 this.props.name
+	            )
+	        );
+	    }
+	});
+
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "source.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	var React = __webpack_require__(1);
+
+	var Target = __webpack_require__(182);
+
+	module.exports = React.createClass({
+	    displayName: 'workspace.targets',
+
+	    propTypes: {
+	        targets: React.PropTypes.array.isRequired
+	    },
+
+	    render: function () {
+	        return React.createElement("div", null, " ",  this.props.targets.map(this.renderTarget), " ");
+	    },
+
+	    renderTarget: function(target) {
+	        return (
+	            React.createElement(Target, React.__spread({key: "target" + target.id},    target))
+	        );
+	    }
+	});
+
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "targets.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	var React = __webpack_require__(1);
+
+	module.exports = React.createClass({
+	    displayName: 'workspace.target',
+
+	    propTypes: {
+	        id: React.PropTypes.number.isRequired,
+	        name: React.PropTypes.string.isRequired,
+	        host: React.PropTypes.string.isRequired,
+	        slug: React.PropTypes.string.isRequired
+	    },
+
+	    render: function () {
+	        var classes = [
+	            'target',
+	            'target_type_' + this.props.type_id
+	        ];
+
+	        return (
+	            React.createElement("div", {className:  classes.join(' ') }, 
+	                 this.props.name
+	            )
+	        );
+	    }
+	});
+
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "target.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(180);
+	var content = __webpack_require__(184);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(182)(content, {});
+	var update = __webpack_require__(186)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -20933,21 +21077,21 @@
 	}
 
 /***/ },
-/* 180 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(181)();
+	exports = module.exports = __webpack_require__(185)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"index.css","sourceRoot":"webpack://"}]);
+	exports.push([module.id, "/* Sources */\n\n.source {\n    background: #dddddd;\n    border: 2px solid #9d9d9d;\n    border-radius: 10px;\n    display: block;\n    font-size: 16px;\n    height: 40px;\n    line-height: 36px;\n    margin-bottom: 15px;\n    padding-left: 15px;\n    vertical-align: middle;\n    width: 100%;\n}\n\n.source:hover {\n    border: 2px solid #333333;\n}\n\n.source_type_1 {\n    background: #e6eff6;\n}\n.source_type_2 {\n    background: #ddf9c3;\n}\n\n\n\n\n/* Targets */\n\n.target {\n    background: #dddddd;\n    border: 2px solid #9d9d9d;\n    border-radius: 10px;\n    display: block;\n    font-size: 16px;\n    height: 40px;\n    line-height: 36px;\n    margin-bottom: 15px;\n    padding-left: 15px;\n    vertical-align: middle;\n    width: 100%;\n}\n\n.target:hover {\n    border: 2px solid #333333;\n}", "", {"version":3,"sources":["/./app/react/stylesheets/index.css"],"names":[],"mappings":"AAAA,aAAa;;AAEb;IACI,oBAAoB;IACpB,0BAA0B;IAC1B,oBAAoB;IACpB,eAAe;IACf,gBAAgB;IAChB,aAAa;IACb,kBAAkB;IAClB,oBAAoB;IACpB,mBAAmB;IACnB,uBAAuB;IACvB,YAAY;CACf;;AAED;IACI,0BAA0B;CAC7B;;AAED;IACI,oBAAoB;CACvB;AACD;IACI,oBAAoB;CACvB;;;;;AAKD,aAAa;;AAEb;IACI,oBAAoB;IACpB,0BAA0B;IAC1B,oBAAoB;IACpB,eAAe;IACf,gBAAgB;IAChB,aAAa;IACb,kBAAkB;IAClB,oBAAoB;IACpB,mBAAmB;IACnB,uBAAuB;IACvB,YAAY;CACf;;AAED;IACI,0BAA0B;CAC7B","file":"index.css","sourcesContent":["/* Sources */\n\n.source {\n    background: #dddddd;\n    border: 2px solid #9d9d9d;\n    border-radius: 10px;\n    display: block;\n    font-size: 16px;\n    height: 40px;\n    line-height: 36px;\n    margin-bottom: 15px;\n    padding-left: 15px;\n    vertical-align: middle;\n    width: 100%;\n}\n\n.source:hover {\n    border: 2px solid #333333;\n}\n\n.source_type_1 {\n    background: #e6eff6;\n}\n.source_type_2 {\n    background: #ddf9c3;\n}\n\n\n\n\n/* Targets */\n\n.target {\n    background: #dddddd;\n    border: 2px solid #9d9d9d;\n    border-radius: 10px;\n    display: block;\n    font-size: 16px;\n    height: 40px;\n    line-height: 36px;\n    margin-bottom: 15px;\n    padding-left: 15px;\n    vertical-align: middle;\n    width: 100%;\n}\n\n.target:hover {\n    border: 2px solid #333333;\n}"],"sourceRoot":"webpack://"}]);
 
 	// exports
 
 
 /***/ },
-/* 181 */
+/* 185 */
 /***/ function(module, exports) {
 
 	/*
@@ -21003,7 +21147,7 @@
 
 
 /***/ },
-/* 182 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -21255,7 +21399,7 @@
 
 
 /***/ },
-/* 183 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -21263,11 +21407,13 @@
 	var Redux = __webpack_require__(166);
 
 	module.exports = function () {
-	    console.log('factory');
 	    return Redux.applyMiddleware(
-	        __webpack_require__(184)
+	        __webpack_require__(188)
 	    )
-	    (Redux.createStore);
+	    (Redux.createStore)
+	    (Redux.combineReducers({
+	        workspace: __webpack_require__(194)
+	    }));
 	};
 
 
@@ -21291,14 +21437,14 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "factory.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 184 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 
-	var _ = __webpack_require__(185);
+	var _ = __webpack_require__(189);
 	var actions = __webpack_require__(178);
-	var Client = __webpack_require__(187);
+	var Client = __webpack_require__(191);
 
 	module.exports = function (store) {
 	    var client = null;
@@ -21328,7 +21474,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "api.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 185 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -33683,10 +33829,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(186)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(190)(module), (function() { return this; }())))
 
 /***/ },
-/* 186 */
+/* 190 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -33702,13 +33848,13 @@
 
 
 /***/ },
-/* 187 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 
-	var router = __webpack_require__(188);
-	var requests = __webpack_require__(189)(router);
+	var router = __webpack_require__(192);
+	var requests = __webpack_require__(193)(router);
 
 	module.exports = function () {
 	    return {
@@ -33725,7 +33871,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "client.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 188 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -33739,7 +33885,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "router.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 189 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -33789,6 +33935,85 @@
 
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "requests.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	var _ = __webpack_require__(189);
+
+	module.exports = function (state, action) {
+	    state = state || [];
+
+	    var index;
+
+	    switch (action.type) {
+
+	        case 'FEED_DATA':
+	            console.log(action);
+
+	            return {  sources: action.sources, targets: action.targets};
+
+	    //    case 'OPEN_CHAPTER':
+	    //
+	    //        index = _.findIndex(state, { key: 'C' + action.id });
+	    //
+	    //        if (action.table)
+	    //            return _.union(
+	    //                state.slice(0, index + 1),
+	    //                [{ type: 'table', id: action.table.id, key: 'T' + action.table.id, state: action.table }],
+	    //                state.slice(index + 1)
+	    //            );
+	    //
+	    //        return _.union(
+	    //            state.slice(0, index + 1),
+	    //            _.map(action.fields, function (field) {
+	    //                return { type: 'field', id: field.id, key: 'F' + field.id, state: field };
+	    //            }),
+	    //            _.map(action.chapters, function (chapter) {
+	    //                return { type: 'chapter', id: chapter.id, key: 'C' + chapter.id, state: chapter };
+	    //            }),
+	    //            state.slice(index + 1)
+	    //        );
+	    //
+	    //    case 'CLOSE_CHAPTER':
+	    //
+	    //        index = _.findIndex(state, { key: 'C' + action.id });
+	    //
+	    //        return _.union(
+	    //            state.slice(0, index + 1),
+	    //            state.slice(index + 1 + action.count)
+	    //        );
+	    //
+	    //    case 'SCROLL_CHAPTER':
+	    //        index = _.findIndex(state, { key: 'C' + action.id });
+	    //        return _.union(
+	    //            state.slice(0, index + 1),
+	    //            _.map(action.fields, function (field) {
+	    //                return { type: 'field', id: field.id, key: 'F' + field.id, state: field };
+	    //            }),
+	    //            _.map(action.chapters, function (chapter) {
+	    //                return { type: 'chapter', id: chapter.id, key: 'C' + chapter.id, state: chapter };
+	    //            }),
+	    //            state.slice(index + 1)
+	    //        );
+	    //
+	    //    case 'FEED_FIELD_SOURCE_STATUS':
+	    //    case 'TOGGLE_CHAPTER_EDITION':
+	    //    case 'FEED_FIELD_VALUES':
+	    //    case 'FEED_VERIFIED_FIELDS':
+	    //    case 'FEED_OVERRIDEN_FIELD':
+	    //
+	    //        return state.concat([]);
+	    }
+
+	    return state;
+	};
+
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/profideo/workspace/db-manager/db-manager/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "workspace.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ }
 /******/ ]);

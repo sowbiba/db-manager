@@ -1,24 +1,17 @@
 var React = require('react');
 var actions = require('../store/actions');
-var connect = require('react-redux').connect;
+var Redux = require('react-redux');
 
-var connector = connect(
-    function (state) {
-        return {
-            loaded: state.loaded,
-            sources: state.sources,
-            targets: state.targets
-        };
-    }
-);
+var Sources = require('./workspace/sources');
+var Targets = require('./workspace/targets');
 
-module.exports = connector(React.createClass({
+
+var component = React.createClass({
     displayName: 'workspace',
 
     propTypes: {
-        loaded: React.PropTypes.bool.isRequired,
-        sources: React.PropTypes.object.isRequired,
-        targets: React.PropTypes.object.isRequired
+        sources: React.PropTypes.array,
+        targets: React.PropTypes.array
     },
 
     computeClass: function() {
@@ -29,18 +22,33 @@ module.exports = connector(React.createClass({
     },
 
     render: function () {
-        if (! this.props.loaded)
+        if (! this.props.sources)
             return (
-                <p className="operations-loading">
+                <p className="revision-loading">
                 Chargement en cours...
                 </p>
             );
 
         return (
             <div className={ this.computeClass() }>
-                <div className="col-xs-5 left operations-sources-list"></div>
-                <div className="col-xs-5 right operations-targets-list"></div>
+                <div className="col-xs-5 left operations-sources-list">
+                    <Sources sources={ this.props.sources }/>
+                </div>
+                <div className="col-xs-5 right operations-targets-list">
+                    <Targets targets={ this.props.targets }/>
+                </div>
             </div>
         );
     }
-}));
+});
+
+var connect = Redux.connect(
+    function (state) {
+        return {
+            sources: state.workspace.sources,
+            targets: state.workspace.targets
+        };
+    }
+);
+
+module.exports = connect(component);

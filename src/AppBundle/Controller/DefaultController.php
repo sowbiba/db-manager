@@ -33,13 +33,16 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/operations/data", name="operations_data")
+     * @Route("/operations/data", name="operations_data", options={"expose": true})
      */
     public function dataAction(Request $request)
     {
         return new JsonResponse([
-            'sources' => $this->get('app.manager.sources')->findAll(),
-            'targets' => $this->get('app.manager.targets')->findAll(),
+            'success' => true,
+            'response' => [
+                'sources' => $this->get('app.manager.sources')->getAllData(),
+                'targets' => $this->get('app.manager.targets')->getAllData(),
+            ]
         ]);
     }
 } 

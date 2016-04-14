@@ -7,10 +7,25 @@
 {% block breadcrumb %}{% include '@App/includes/menu.html.twig' %}{% endblock breadcrumb %}
 
 {% block content %}
-    <div id="react-workspace"></div>
+    <div id="react-workspace">
+        <p className="operations-loading">
+            Chargement en cours...
+        </p>
+    </div>
 {% endblock content %}
 
 {% block javascripts %}
+    {% javascripts filter='?yui_js'
+    'bundles/fosjsrouting/js/router.js'
+    'js/fos_js_routes.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        Routing.setBaseUrl("{{ app.request.baseUrl }}")
+    </script>
+
     {% javascripts
     '@AppBundle/Resources/public/javascripts/operations.js'
     output='/js/operations.js'

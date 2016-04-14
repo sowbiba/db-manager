@@ -9,7 +9,6 @@ require('../stylesheets/index.css');
 var workspace = document.getElementById('react-workspace');
 
 var store = require('../store/factory')();
-console.log(store());
 
 ReactDOM.render(<Provider store={ store }><Workspace /></Provider>, workspace);
 

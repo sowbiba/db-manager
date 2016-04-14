@@ -143,4 +143,35 @@ abstract class AbstractManager
     {
         return $this->repository;
     }
+
+    /**
+     * @param $object
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    protected function convert($object) {
+        if (! $object instanceof $this->entityClass) {
+            throw new \Exception("Object must be instance of " . $this->entityClass);
+        }
+
+        throw new \Exception("This method must be overriden in object's manager");
+    }
+
+    public function getData($object)
+    {
+        if (! $object instanceof $this->entityClass) {
+            throw new \Exception("Object must be instance of " . $this->entityClass);
+        }
+
+        return $this->convert($object);
+    }
+
+    public function getAllData()
+    {
+        return array_map(function ($object) {
+            return $this->convert($object);
+        }, $this->findAll());
+    }
 }

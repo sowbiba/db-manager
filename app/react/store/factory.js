@@ -1,11 +1,13 @@
 var Redux = require('redux');
 
 module.exports = function () {
-    console.log('factory');
     return Redux.applyMiddleware(
         require('./middlewares/api')
     )
-    (Redux.createStore);
+    (Redux.createStore)
+    (Redux.combineReducers({
+        workspace: require('./reducers/workspace')
+    }));
 };
 
 

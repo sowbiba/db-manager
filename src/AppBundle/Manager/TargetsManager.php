@@ -21,4 +21,26 @@ class TargetsManager extends AbstractManager
         parent::__construct($entityManager);
     }
 
+
+
+    /**
+     * @param Target $target
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    protected function convert($target)
+    {
+        if (! $target instanceof $this->entityClass) {
+            throw new \Exception("Object must be instance of " . $this->entityClass);
+        }
+
+        return array(
+            'id'        => $target->getId(),
+            'name'      => $target->getName(),
+            'host'      => $target->getHost(),
+            'slug'      => $target->getSlug(),
+        );
+    }
 } 
