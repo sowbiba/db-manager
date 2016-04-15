@@ -33,7 +33,7 @@ class SourcesController extends Controller
         $flashBag->clear();
 
         //var_dump(SourcesType::class);
-        $form = $this->createForm("\AppBundle\Form\Type\SourcesType");
+        $form = $this->createForm('AppBundle\Form\Type\SourcesType');
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
@@ -71,7 +71,7 @@ class SourcesController extends Controller
         $flashBag = $this->get('session')->getFlashBag();
         $flashBag->clear();
 
-        $form = $this->createForm("\AppBundle\Form\Type\SourcesType", $source);
+        $form = $this->createForm("AppBundle\Form\Type\SourcesType", $source);
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);

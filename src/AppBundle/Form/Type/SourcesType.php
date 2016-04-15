@@ -18,8 +18,8 @@ class SourcesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', EntityType::class, array(
-                'class' => SourceType::class,
+            ->add('type', 'Symfony\Bridge\Doctrine\Form\Type\EntityType', array(
+                'class' => "AppBundle:SourceType",
                 'choice_label' => 'name',
             ))
             ->add('name')
@@ -43,7 +43,7 @@ class SourcesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Source::class
+            'data_class' => 'AppBundle\Entity\Source'
         ));
     }
 }

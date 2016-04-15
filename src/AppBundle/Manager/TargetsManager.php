@@ -16,7 +16,7 @@ class TargetsManager extends AbstractManager
 {
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityClass = Target::class;
+        $this->entityClass = "\AppBundle\Entity\Target";
 
         parent::__construct($entityManager);
     }

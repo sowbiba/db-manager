@@ -16,7 +16,7 @@ class SourcesManager extends AbstractManager
 {
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityClass = Source::class;
+        $this->entityClass = "\AppBundle\Entity\Source";
 
         parent::__construct($entityManager);
     }

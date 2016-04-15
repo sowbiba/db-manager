@@ -56,8 +56,6 @@ class SshConnection extends AbstractConnection
         if (
             null === $this->host ||
             null === $this->port ||
-            null === $this->username ||
-            null === $this->password ||
             null === $this->filepath
         ) {
             $this->messages = ["Les paramètres de connexion ne sont pas complets"];
@@ -68,11 +66,11 @@ class SshConnection extends AbstractConnection
         array_push($this->messages, "Vérification de la connectivité.");
 
         $connection = ssh2_connect($this->host, $this->port);
-        if(! ssh2_auth_password($connection, $this->username, $this->password)){
-            array_push($this->messages, sprintf("La connexion au serveur [ %s ] a échoué.", $this->host));
-
-            return false;
-        }
+//        if(! ssh2_auth_password($connection, $this->username, $this->password)){
+//            array_push($this->messages, sprintf("La connexion au serveur [ %s ] a échoué.", $this->host));
+//
+//            return false;
+//        }
 
         array_push($this->messages, "Connectivité : OK.");
 
