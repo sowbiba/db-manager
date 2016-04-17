@@ -41,6 +41,7 @@ class SourcesManager extends AbstractManager
             'slug'      => $source->getSlug(),
             'type_id'   => $source->getType()->getId(),
             'type_name' => $source->getType()->getName(),
+            'content'   => array()
         );
     }
 } 

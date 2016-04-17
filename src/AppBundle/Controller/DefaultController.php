@@ -26,9 +26,6 @@ class DefaultController extends Controller
      */
     public function listAction(Request $request)
     {
-//        $sources = $this->get('app.manager.sources')->findAll();
-//        $targets = $this->get('app.manager.targets')->findAll();
-
         return $this->render('AppBundle:operations:home.html.twig', array());
     }
 

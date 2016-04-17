@@ -37,6 +37,13 @@ module.exports = function (router) {
                 router.loadData(),
                 respond(callback)
             );
+        },
+
+        loadSourceContent: function (id, callback) {
+            send(
+                router.loadSourceContent(id),
+                respond(callback)
+            );
         }
     }
 };

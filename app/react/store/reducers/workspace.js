@@ -8,9 +8,22 @@ module.exports = function (state, action) {
     switch (action.type) {
 
         case 'FEED_DATA':
-            console.log(action);
+            console.log(state, 'la');
+            return { sources: action.sources, targets: action.targets};
 
-            return {  sources: action.sources, targets: action.targets};
+        case 'FEED_SOURCE_CONTENT':
+            console.log(state);
+            return _.extend(
+                state,
+                { sources: _.map(state.sources, function (source) {
+                                if (source.id == action.id) {
+                                    return _.extend(source, {content: action.files});
+                                }
+
+                                return source;
+                            })
+                }
+            );
 
     //    case 'OPEN_CHAPTER':
     //

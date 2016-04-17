@@ -65,12 +65,12 @@ class SshConnection extends AbstractConnection
 
         array_push($this->messages, "Vérification de la connectivité.");
 
-        $connection = ssh2_connect($this->host, $this->port);
-//        if(! ssh2_auth_password($connection, $this->username, $this->password)){
-//            array_push($this->messages, sprintf("La connexion au serveur [ %s ] a échoué.", $this->host));
-//
-//            return false;
-//        }
+        $connection = $this->connect();
+        if (! $connection) {
+            array_push($this->messages, sprintf("La connexion au serveur [ %s ] a échoué.", $this->host));
+
+            return false;
+        }
 
         array_push($this->messages, "Connectivité : OK.");
 
@@ -96,5 +96,51 @@ class SshConnection extends AbstractConnection
         array_push($this->messages, "Test de connexion : OK.");
 
         return true;
+    }
+
+    public function connect()
+    {
+        try {
+            $connection = ssh2_connect($this->host, $this->port);
+            if (!ssh2_auth_password($connection, $this->username, $this->password)) {
+                return false;
+            }
+        } catch(\Exception $e) {
+            return false;
+        }
+
+        return $connection;
+    }
+
+    public function content()
+    {
+        $this->messages = array();
+
+        if (! $this->test()) {
+            return false;
+        }
+
+        $connection = $this->connect();
+        if (! $connection) {
+            array_push($this->messages, sprintf("La connexion au serveur [ %s ] a échoué.", $this->host));
+
+            return false;
+        }
+
+        $sftp = ssh2_sftp($connection);
+
+        $handle = opendir(sprintf('ssh2.sftp://%s%s', $sftp, $this->filepath));
+
+        $files = array();
+        while (false != ($entry = readdir($handle))) {
+            if (
+                !in_array($entry, array('.', '..')) &&
+                in_array(strtolower(pathinfo($entry, PATHINFO_EXTENSION)), array('sql', 'gz', 'zip'))
+            ) {
+                $files[] = "$entry";
+            }
+        }
+
+        return $files;
     }
 } 

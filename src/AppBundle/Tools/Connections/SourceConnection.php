@@ -11,11 +11,14 @@ namespace AppBundle\Tools\Connections;
 
 use AppBundle\Entity\Source;
 
-final class SourceConnectionTester
+final class SourceConnection
 {
     const LOCAL_SOURCE = 1;
     const SSH_SOURCE = 2;
 
+    /**
+     * @var AbstractConnection
+     */
     private $connection;
 
     public function testConnection(Source $source)
@@ -27,6 +30,17 @@ final class SourceConnectionTester
         }
 
         return $this->connection->test();
+    }
+
+    public function getContent(Source $source)
+    {
+        $this->getConnection($source);
+
+        if (null === $this->connection) {
+            return false;
+        }
+
+        return $this->connection->content();
     }
 
     private function getConnection(Source $source)
@@ -56,7 +70,7 @@ final class SourceConnectionTester
         return $connection;
     }
 
-    private function getSshConnection(Source $source)
+    public function getSshConnection(Source $source)
     {
         if (static::SSH_SOURCE !== $source->getType()->getId()) {
             return null;

@@ -20,6 +20,8 @@ class MySQLConnection extends AbstractConnection
 
     private $workingDir;
 
+    private $parameters = array();
+
     /**
      * @param array $parameters
      * @return MysqliConnection|null
@@ -36,6 +38,8 @@ class MySQLConnection extends AbstractConnection
             return null;
         }
 
+        $this->parameters = $parameters;
+
         $this->connection = new MysqliConnection(
             [
                 'host' => $parameters['host'],
@@ -46,6 +50,22 @@ class MySQLConnection extends AbstractConnection
         );
 
         $this->workingDir = $parameters['working_dir'];
+    }
+
+    public function setDatabase($dbname)
+    {
+        if (empty($this->parameters)) {
+            throw new \Exception('You must set other parameters first.');
+        }
+
+        $this->parameters['dbname'] = $dbname;
+
+        $this->configure($this->parameters);
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
     }
 
     public function test()

@@ -51,4 +51,30 @@ class LocalConnection extends AbstractConnection
 
         return $response;
     }
+
+    public function content()
+    {
+        $this->messages = array();
+
+        if (! $this->test()) {
+            return false;
+        }
+
+        $directoryContent = scandir($this->filepath);
+
+        $files = array();
+        foreach ($directoryContent as $key => $value) {
+            $path = $this->filepath . DIRECTORY_SEPARATOR . $value;
+
+            if (! is_dir($path) && !in_array($value, array('.', '..'))) {
+                $path_parts = pathinfo($path);
+
+                if (in_array(strtolower($path_parts['extension']), array('sql', 'gz', 'zip'))) {
+                    $files[] = $value;
+                }
+            }
+        }
+
+        return $files;
+    }
 } 

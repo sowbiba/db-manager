@@ -7,7 +7,6 @@ module.exports = function (store) {
 
     return function (next) {
         return function (action) {
-            console.log(action);
             switch (action.type) {
 
                 case 'LOAD_DATA':
@@ -16,6 +15,17 @@ module.exports = function (store) {
 
                     client.getData(function (error, data) {
                         store.dispatch(actions.feedData(data.sources, data.targets));
+                        if (action.callback) action.callback(data);
+                    });
+
+                    break;
+
+                case 'LOAD_SOURCE_CONTENT':
+
+                    client = Client();
+
+                    client.getSourceContent(action.id, function (error, data) {
+                        store.dispatch(actions.feedSourceContent(action.id, data.files));
                         if (action.callback) action.callback(data);
                     });
 

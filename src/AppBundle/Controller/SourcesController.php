@@ -4,10 +4,14 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Source;
 use AppBundle\Form\Type\SourcesType;
-use AppBundle\Tools\Connections\SourceConnectionTester;
+use AppBundle\Tools\Connections\SourceConnection;
+use AppBundle\Tools\Connections\TargetConnection;
+use AppBundle\Tools\Tasks\MysqlTasks;
+use AppBundle\Tools\Tasks\SshTasks;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class SourcesController extends Controller
@@ -129,8 +133,17 @@ class SourcesController extends Controller
     public function testAction(Request $request, Source $source)
     {
         try {
-            $connectionTester = new SourceConnectionTester();
+            $connectionTester = new SourceConnection();
             $connectionTester->testConnection($source);
+
+            $sshTask = new SshTasks($connectionTester->getSshConnection($source));
+            $sshTask->transferFile($source->getFilepath(), 'toto1.sql');
+
+            $target = $this->get('app.manager.targets')->find(1);
+            $targetConnection = new TargetConnection();
+            $conn = $targetConnection->getConnection($target);
+            $mysqlTask = new MysqlTasks($conn);
+            $mysqlTask->import('/tmp/toto1.sql', 'toto');
         } catch(\Exception $e) {
             var_dump($e->getMessage());die();
         }
@@ -138,5 +151,21 @@ class SourcesController extends Controller
         return $this->render('AppBundle:sources:test.html.twig', array(
             'result' =>  nl2br($connectionTester->getMessages())
         ));
+    }
+
+    /**
+     * @Route("/source/data/{id}", name="source_data", options={"expose": true})
+     *
+     * @ParamConverter("source", class="AppBundle:Source")
+     */
+    public function dataAction(Request $request, Source $source)
+    {
+        $connection = new SourceConnection();
+        $content = $connection->getContent($source);
+
+        return new JsonResponse([
+            'success' => false !== $content,
+            'response' => false === $content ? [] : ['files' => $content]
+        ]);
     }
 }

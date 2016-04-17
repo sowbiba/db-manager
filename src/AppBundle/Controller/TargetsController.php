@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Target;
 use AppBundle\Form\Type\TargetsType;
-use AppBundle\Tools\Connections\TargetConnectionTester;
+use AppBundle\Tools\Connections\TargetConnection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -128,7 +128,7 @@ class TargetsController extends Controller
     public function testAction(Request $request, Target $target)
     {
         try {
-            $connectionTester = new TargetConnectionTester();
+            $connectionTester = new TargetConnection();
             $connectionTester->testConnection($target);
         } catch(\Exception $e) {
             var_dump($e->getMessage());die();

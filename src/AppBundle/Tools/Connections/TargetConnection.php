@@ -11,9 +11,13 @@ namespace AppBundle\Tools\Connections;
 
 use AppBundle\Entity\Target;
 
-final class TargetConnectionTester
+final class TargetConnection
 {
+    /**
+     * @var AbstractConnection
+     */
     private $connection;
+
     private $messages = [];
 
     public function testConnection(Target $target)
@@ -46,7 +50,7 @@ final class TargetConnectionTester
      * @param Target $target
      * @return MySQLConnection
      */
-    private function getConnection(Target $target)
+    public function getConnection(Target $target)
     {
         try {
             $connection = new MySQLConnection();

@@ -41,6 +41,7 @@ class TargetsManager extends AbstractManager
             'name'      => $target->getName(),
             'host'      => $target->getHost(),
             'slug'      => $target->getSlug(),
+            'content'   => array()
         );
     }
 } 

@@ -9,9 +9,21 @@ var Targets = require('./workspace/targets');
 var component = React.createClass({
     displayName: 'workspace',
 
+    childContextTypes: {
+        getSourceContent: React.PropTypes.func.isRequired,
+        getTargetContent: React.PropTypes.func.isRequired
+    },
+
     propTypes: {
         sources: React.PropTypes.array,
         targets: React.PropTypes.array
+    },
+
+    getChildContext: function () {
+        return {
+            getSourceContent: function(id, callback) { this.props.getSourceContent(id, callback) }.bind(this),
+            getTargetContent: function(id, callback) { this.props.getTargetContent(id, callback) }.bind(this)
+        }
     },
 
     computeClass: function() {
@@ -44,9 +56,16 @@ var component = React.createClass({
 
 var connect = Redux.connect(
     function (state) {
+        console.log(state, 'toto');
         return {
             sources: state.workspace.sources,
             targets: state.workspace.targets
+        };
+    },
+    function (dispatch) {
+        return {
+            getSourceContent: function (id, callback) { dispatch(actions.getSourceContent(id, callback)) },
+            getTargetContent: function (id) { dispatch(actions.getTargetContent(id)) }
         };
     }
 );
