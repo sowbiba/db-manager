@@ -12,6 +12,7 @@ namespace AppBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Dumper;
 
 class InitAppCommand extends ContainerAwareCommand
 {
@@ -29,6 +30,53 @@ class InitAppCommand extends ContainerAwareCommand
         try {
             $container = $this->getContainer();
             $this->output = $output;
+
+            $this->writeLog("Enter full path to id_rsa.pub :", 'info');
+
+            $handle = fopen ("php://stdin","r");
+            $line = fgets($handle);
+            $pubkeyPath = str_replace("\n", "", $line);
+            $privatekeyPath = pathinfo($pubkeyPath)['dirname'] . DIRECTORY_SEPARATOR . pathinfo($pubkeyPath)['filename'];
+            if(! file_exists($pubkeyPath) || ! file_exists($privatekeyPath)){
+                $this->writeLog("Path given [$pubkeyPath] is wrong. Please re-execute the command.", 'error');
+                return -1;
+            }
+            fclose($handle);
+
+            $this->writeLog("Enter your username :", 'info');
+
+            $handle = fopen ("php://stdin","r");
+            $line = fgets($handle);
+            $username = trim(str_replace("\n", "", $line));
+
+            if('' === $username){
+                $this->writeLog("Username given [$username] is wrong. Please re-execute the command.", 'error');
+                return -1;
+            }
+
+            fclose($handle);
+
+
+            $this->writeLog("Enter your passphrase :", 'info');
+
+            $handle = fopen ("php://stdin","r");
+            $line = fgets($handle);
+            $passPhrase = str_replace("\n", "", $line);
+
+            fclose($handle);
+
+            $hostParameters = array(
+                'private_key' => $privatekeyPath,
+                'public_key' => $pubkeyPath,
+                'username' => $username,
+                'passphrase' => $passPhrase,
+            );
+
+            $dumper = new Dumper();
+            $yaml = $dumper->dump($hostParameters);
+            $path = $container->getParameter('kernel.root_dir') . '/config/host_parameters.yml';
+            file_put_contents($path, $yaml);
+
 
             $initSqlFile = sprintf("%s/database/init/data.sql", $container->getParameter('kernel.root_dir'));
 

@@ -10,6 +10,9 @@ namespace AppBundle\Tools\Connections;
 
 
 use Doctrine\DBAL\Driver\Mysqli\MysqliConnection;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml;
 
 class SshConnection extends AbstractConnection
 {
@@ -18,10 +21,16 @@ class SshConnection extends AbstractConnection
     private $username;
     private $password;
     private $filepath;
+    private $parametersFile;
 
     public function __construct()
     {
 
+    }
+
+    public function setParametersFile($parametersFile)
+    {
+        $this->parametersFile = $parametersFile;
     }
 
     public function setFilepath($filepath)
@@ -102,14 +111,43 @@ class SshConnection extends AbstractConnection
     {
         try {
             $connection = ssh2_connect($this->host, $this->port);
-            if (!ssh2_auth_password($connection, $this->username, $this->password)) {
-                return false;
+
+            if (null === $this->username) { // public key authentication
+
+                $keys = $this->getKeys();
+                if ($keys) {
+                    if (! ssh2_auth_pubkey_file($connection, $keys['username'],
+                        $keys['public_key'],
+                        $keys['private_key'],
+                        $keys['passphrase']
+                    )) {
+                        return false;
+                    }
+                }
+
+            } else { // login/password authentication
+                if (!ssh2_auth_password($connection, $this->username, $this->password)) {
+                    return false;
+                }
             }
         } catch(\Exception $e) {
             return false;
         }
 
         return $connection;
+    }
+
+    private function getKeys()
+    {
+        $parser = new Parser();
+        $keys = $parser->parse(file_get_contents($this->parametersFile));
+
+        return array(
+            'username'      => $keys['username'],
+            'public_key'    => $keys['public_key'],
+            'private_key'   => $keys['private_key'],
+            'passphrase'    => $keys['passphrase'],
+        );
     }
 
     public function content()
